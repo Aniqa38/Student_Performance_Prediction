@@ -1,0 +1,185 @@
+======================================================================
+  DAT7303 Portfolio 3 – Student Performance Prediction (CRISP-DM)
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+TASK 1 – Business Understanding & Data Understanding
+──────────────────────────────────────────────────────────────────────
+
+Business Objective:
+  Educational institutions face ongoing challenges in identifying students
+  at risk of poor academic performance. Early and accurate prediction of
+  final grades enables targeted interventions, resource allocation, and
+  personalised support strategies.
+
+Business Success Criteria:
+  - Predict final student grade (G3) with R² ≥ 0.75
+  - Identify the top five features most strongly associated with academic outcome
+  - Provide a deployable model suitable for use at the start of the academic year
+
+Data Mining Goal:
+  Build and compare three regression models to predict G3 (continuous, 0–20).
+  Select the optimal model based on R², MAE, and RMSE.
+
+Project Plan:
+  Step 1 – Business Understanding  (Task 1)
+  Step 2 – Data Understanding       (Task 1)
+  Step 3 – Data Preparation         (Task 2)
+  Step 4 – Modelling                (Task 3)
+  Step 5 – Evaluation               (Task 4)
+  Tools: Python 3, pandas, scikit-learn, matplotlib, seaborn
+
+
+  Dataset loaded. Shape: (395, 33)
+
+── Data Description ──
+school          str
+sex             str
+age           int64
+address         str
+famsize         str
+Pstatus         str
+Medu          int64
+Fedu          int64
+Mjob            str
+Fjob            str
+reason          str
+guardian        str
+traveltime    int64
+studytime     int64
+failures      int64
+schoolsup       str
+famsup          str
+paid            str
+activities      str
+nursery         str
+higher          str
+internet        str
+romantic        str
+famrel        int64
+freetime      int64
+goout         int64
+Dalc          int64
+Walc          int64
+health        int64
+absences      int64
+G1            int64
+G2            int64
+G3            int64
+
+  Numerical summary:
+          age    Medu    Fedu  traveltime  studytime  failures  famrel  freetime   goout    Dalc    Walc  health  absences      G1      G2      G3
+count  395.00  395.00  395.00      395.00     395.00    395.00  395.00    395.00  395.00  395.00  395.00  395.00    395.00  395.00  395.00  395.00
+mean    16.70    2.75    2.52        1.45       2.04      0.33    3.94      3.24    3.11    1.48    2.29    3.55      5.71   10.91   10.71   10.42
+std      1.28    1.09    1.09        0.70       0.84      0.74    0.90      1.00    1.11    0.89    1.29    1.39      8.00    3.32    3.76    4.58
+min     15.00    0.00    0.00        1.00       1.00      0.00    1.00      1.00    1.00    1.00    1.00    1.00      0.00    3.00    0.00    0.00
+25%     16.00    2.00    2.00        1.00       1.00      0.00    4.00      3.00    2.00    1.00    1.00    3.00      0.00    8.00    9.00    8.00
+50%     17.00    3.00    2.00        1.00       2.00      0.00    4.00      3.00    3.00    1.00    2.00    4.00      4.00   11.00   11.00   11.00
+75%     18.00    4.00    3.00        2.00       2.00      0.00    5.00      4.00    4.00    2.00    3.00    5.00      8.00   13.00   13.00   14.00
+max     22.00    4.00    4.00        4.00       4.00      3.00    5.00      5.00    5.00    5.00    5.00    5.00     75.00   19.00   19.00   20.00
+
+  Generating Task 1 exploratory visualisations...
+
+── Data Quality Check ──
+  Missing values:
+Series([], dtype: int64)
+  Duplicate rows: 0
+  G3 range: 0 – 20
+
+──────────────────────────────────────────────────────────────────────
+TASK 2 – Data Preparation
+──────────────────────────────────────────────────────────────────────
+
+  After dropping 'school' column: (395, 32)
+  Missing values before: 0
+  Missing values after:  0
+  After encoding: 41 features
+  Engineered: avg_parental_edu, alcohol_risk
+
+  Outlier counts (IQR method):
+    age: 1 outliers
+    absences: 15 outliers
+    G1: 0 outliers
+    G2: 13 outliers
+    G3: 0 outliers
+
+  Generating Task 2 visualisations...
+
+  Train set: 316 rows | Test set: 79 rows
+
+──────────────────────────────────────────────────────────────────────
+TASK 3 – Modelling
+──────────────────────────────────────────────────────────────────────
+
+── Model 1: Multiple Linear Regression ──
+
+  Linear Regression
+    MAE  = 1.6506
+    RMSE = 2.3853
+    R²   = 0.7225
+    5-Fold CV R² = 0.8286 ± 0.0243
+
+── Model 2: Decision Tree Regressor ──
+
+  Decision Tree
+    MAE  = 1.3554
+    RMSE = 2.4060
+    R²   = 0.7177
+    5-Fold CV R² = 0.8441 ± 0.0702
+
+── Model 3: Random Forest Regressor ──
+
+  Random Forest
+    MAE  = 1.1921
+    RMSE = 2.0083
+    R²   = 0.8033
+    5-Fold CV R² = 0.9023 ± 0.0287
+
+── Model Comparison Table ──
+            Model    MAE   RMSE     R2  CV_R2
+Linear Regression 1.6506 2.3853 0.7225 0.8286
+    Decision Tree 1.3554 2.4060 0.7177 0.8441
+    Random Forest 1.1921 2.0083 0.8033 0.9023
+
+  Generating Task 3 visualisations...
+
+──────────────────────────────────────────────────────────────────────
+TASK 4 – Evaluation
+──────────────────────────────────────────────────────────────────────
+
+  Optimal Model: Random Forest
+  R² = 0.8033  |  MAE = 1.1921  |  RMSE = 2.0083
+
+  Evaluation Summary:
+  ─────────────────────────────────────────────────────────────────
+  Linear Regression provides a useful baseline and is interpretable
+  but underperforms on non-linear relationships in the data.
+
+  Decision Tree improves on non-linearity but risks overfitting
+  with shallow depth settings.
+
+  Random Forest achieves the highest R², lowest MAE, and lowest RMSE
+  by aggregating 200 decision trees, reducing variance substantially.
+  It meets the business success criterion of R² ≥ 0.75.
+
+  The top predictors identified are G2 (second period grade),
+  absences, reason for choosing the school, age and G1 (first
+  period grade). G2 dominates (about 79% of importance), so the
+  model mainly extends the existing grade trajectory; earlier-
+  in-the-year prediction would need models without G1 and G2.
+
+  Next Steps:
+  - Hyperparameter tuning (GridSearchCV) for further improvement
+  - Gather additional features (e.g. teacher assessments, attendance logs)
+  - Deploy as a web dashboard for academic staff
+  ─────────────────────────────────────────────────────────────────
+
+  Sample Prediction (using optimal model):
+
+  Student Profile: Age=16, StudyTime=3, G1=12, G2=13, Failures=0, Absences=3
+  Predicted Final Grade (G3): 13.13 / 20
+
+
+======================================================================
+  All tasks complete. Figures saved to /figures/
+======================================================================
